@@ -242,6 +242,39 @@
       <span id="currentPage"></span>
       <button onclick="fetchData('next')">Next</button>
     </div>
+    <!-- Search Youtube Videos and Play in Iframe -->
+    <div class="container">
+      <h1>Search Youtube Videos</h1>
+      <input id="searchInput" type="text" placeholder="Enter search term">
+      <button onclick="searchVideos()">Search</button>
+      <div id="videoContainer"></div>
+    </div>
+    <script>
+      function searchVideos() {
+        const searchTerm = document.getElementById('searchInput').value;
+        $.ajax({
+          url: `https://www.googleapis.com/youtube/v3/search?part=snippet&maxResults=10&q=${searchTerm}&key=YOUR_YOUTUBE_API_KEY`, // Replace with your API URL
+          type: 'GET',
+          success: function(data) {
+            const videoContainer = document.getElementById('videoContainer');
+            videoContainer.innerHTML = '';
+            for (let i = 0; i < data.items.length; i++) {
+              const video = data.items[i];
+              const iframe = document.createElement('iframe');
+              iframe.src = `https://www.youtube.com/embed/${video.id.videoId}`;
+              iframe.width = 560;
+              iframe.height = 315;
+              iframe.frameborder = 0;
+              iframe.allow = 'accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture';
+              videoContainer.appendChild(iframe);
+            }
+          },
+          error: function(error) {
+            console.error('Error:', error);
+          }
+        });
+      }
+    </script>
     <script>
       let currentPage = 1;
 
