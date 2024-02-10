@@ -5,14 +5,21 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+    <script src="https://www.google.com/finance/quote/AAPL:NASDAQ?window=1d"></script>
+    <script src="https://www.alphavantage.co/query?function=GLOBAL_QUOTE&symbol=AAPL&apikey=EI2SDSRC4PI8M5H8"></script>
+    <script src="https://www.alphavantage.co/query?function=TIME_SERIES_DAILY&symbol=AAPL&apikey=EI2SDSRC4PI8M5H8"></script>
+    <script src="https://unpkg.com/lightweight-charts/dist/lightweight-charts.standalone.production.js"></script>
+    <script src="https://www.googleapis.com/youtube/v3/search?part=snippet&maxResults=10&q=apple&key=YOUR_YOUTUBE_API_KEY"></script>
+    <script src="https://api.example.com/stock/AAPL"></script>
     <title>Stock Data</title>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css">
     <style>
-.grid-container {
-  display: grid;
-  grid-template-columns: auto auto auto;
-  padding: 10px;
-}
+        .grid-container {
+          display: grid;
+          grid-template-columns: auto auto auto;
+          padding: 10px;
+        }
         .grid-item {
           border: 1px solid rgba(0, 0, 0, 0.8);
           padding: 20px;
@@ -273,6 +280,8 @@
       <button onclick="retrieveData()">Retrieve Data</button>
       <button onclick="updateData()">Update Data</button>
       <button onclick="deleteData()">Delete Data</button>
+
+      <div id="chartContainer"></div>
 
       <div id="dataContainer" class="grid-container"></div>
     </div>
