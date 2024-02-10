@@ -8,11 +8,11 @@
     <title>Stock Data</title>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css">
     <style>
-        .grid-container {
-          display: grid;
-          grid-template-columns: auto auto auto;
-          padding: 10px;
-        }
+.grid-container {
+  display: grid;
+  grid-template-columns: auto auto auto;
+  padding: 10px;
+}
         .grid-item {
           border: 1px solid rgba(0, 0, 0, 0.8);
           padding: 20px;
@@ -139,7 +139,7 @@
       function fetchAlphaData() {
         const ticker = document.getElementById('tickerInput').value;
         $.ajax({
-          url: `https://www.alphavantage.co/query?function=GLOBAL_QUOTE&symbol=${ticker}&apikey=YOUR_ALPHA_VANTAGE_API_KEY`, // Replace with your API URL
+          url: `https://www.alphavantage.co/query?function=GLOBAL_QUOTE&symbol=${ticker}&apikey=EI2SDSRC4PI8M5H8`, // Replace with your API URL
           type: 'GET',
           success: function(data) {
             const dataContainer = document.getElementById('dataContainer');
@@ -277,6 +277,7 @@
 
       <div id="dataContainer" class="grid-container"></div>
     </div>
+    <div class="plot"></div>
     <div id="paginationContainer">
       <button onclick="fetchData('prev')">Previous</button>
       <span id="currentPage"></span>
@@ -347,7 +348,7 @@
 
       class StockFetcher {
         constructor(apiKey) {
-          this.apiKey = apiKey;
+          this.apiKey = "EI2SDSRC4PI8M5H8";
         }
 
         async fetch(ticker) {
@@ -357,7 +358,7 @@
         }
       }
 
-      const fetcher = new StockFetcher('YOUR_ALPHA_VANTAGE_API_KEY');
+      const fetcher = new StockFetcher('EI2SDSRC4PI8M5H8');
 
       async function fetchData() {
         const ticker = document.getElementById('tickerInput').value;
@@ -388,6 +389,59 @@
         const dataContainer = document.getElementById('dataContainer');
         dataContainer.innerHTML = data;
       }
+    </script>
+    <script>
+      // Plotly Chart from tickerInput
+      function fetchStockData() {
+        const ticker = document.getElementById('tickerInput').value;
+        $.ajax({
+          url: `https://api.example.com/stock/${ticker}`, // Replace with your API URL
+          type: 'GET',
+          success: function(data) {
+            const dates = Object.keys(data);
+            const prices = Object.values(data);
+            const trace = {
+              x: dates,
+              y: prices,
+              type: 'scatter'
+            };
+            const layout = {
+              title: `${ticker} Stock Price`
+            };
+            Plotly.newPlot('chartContainer', [trace], layout);
+          },
+          error: function(error) {
+            console.error('Error:', error);
+          }
+        });
+      }
+
+      // Plotly Chart from Alpha Vantage with date range
+      function fetchAlphaData() {
+        const ticker = document.getElementById('tickerInput').value;
+        const window = document.getElementById('windowInput').value;
+        $.ajax({
+          url: `https://www.alphavantage.co/query?function=TIME_SERIES_DAILY&symbol=${ticker}&apikey=YOUR_ALPHA_VANTAGE_API_KEY`, // Replace with your API URL
+          type: 'GET',
+          success: function(data) {
+            const dates = Object.keys(data['Time Series (Daily)']).slice(0, window);
+            const prices = Object.values(data['Time Series (Daily)']).map(obj => obj['4. close']).slice(0, window);
+            const trace = {
+              x: dates,
+              y: prices,
+              type: 'scatter'
+            };
+            const layout = {
+              title: `${ticker} Stock Price`
+            };
+            Plotly.newPlot('chartContainer', [trace], layout);
+          },
+          error: function(error) {
+            console.error('Error:', error);
+          }
+        });
+      }
+
     </script>
   </body>
 </html>
