@@ -228,8 +228,6 @@
     <div class="container">
       <h1>Stock Data</h1>
       <input id="tickerInput" type="text" placeholder="Enter ticker">
-      <button onclick="fetchGoogleFinanceData()">Fetch Google Finance Data</button>
-      <button onclick="fetchStockData()">Fetch Stock Data</button>
       <button onclick="fetchData()">Fetch Data</button>
       <button onclick="fetchAlphaData()">Fetch Alpha Data</button>
       <button onclick="storeData()">Store Data</button>
@@ -278,8 +276,6 @@
       }
     </script>
     <script>
-    </script>
-    <script>
       let currentPage = 1;
 
       function fetchData(direction) {
@@ -306,7 +302,6 @@
           }
         });
       }
-
       class StockFetcher {
         constructor(apiKey) {
           this.apiKey = apiKey;
@@ -339,14 +334,6 @@
           div.style.display = 'block';
           container.appendChild(div);
         }
-      }
-
-      async function fetchGoogleFinanceData() {
-        const ticker = document.getElementById('tickerInput').value;
-        const response = await fetch(`https://www.google.com/finance/quote/${ticker}:NASDAQ?window=5Y`);
-        const data = await response.text();
-        const dataContainer = document.getElementById('dataContainer');
-        dataContainer.innerHTML = data;
       }
     </script>
   </body>
