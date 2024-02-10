@@ -16,8 +16,8 @@
         .grid-item {
           border: 1px solid rgba(0, 0, 0, 0.8);
           padding: 20px;
-          font-size: 30px;
           text-align: center;
+          font-size: 16px;
         }
     </style>
     <script>
@@ -229,6 +229,12 @@
       <h1>Stock Data</h1>
       <input id="tickerInput" type="text" placeholder="Enter ticker">
       <button onclick="fetchData()">Fetch Data</button>
+      <button onclick="fetchAlphaData()">Fetch Alpha Data</button>
+      <button onclick="storeData()">Store Data</button>
+      <button onclick="retrieveData()">Retrieve Data</button>
+      <button onclick="updateData()">Update Data</button>
+      <button onclick="deleteData()">Delete Data</button>
+
       <div id="dataContainer" class="grid-container"></div>
     </div>
     <div id="paginationContainer">
