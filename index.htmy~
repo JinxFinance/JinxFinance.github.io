@@ -265,10 +265,11 @@
         <option value="1y">1 Year</option>
         <option value="5y">5 Years</option>
       </select>
-      <button onclick="fetchAlphaData()">Fetch Alpha Data</button>
+
       <button onclick="fetchGoogleFinanceData()">Fetch Google Finance Data</button>
       <button onclick="fetchStockData()">Fetch Stock Data</button>
       <button onclick="fetchData()">Fetch Data</button>
+      <button onclick="fetchAlphaData()">Fetch Alpha Data</button>
       <button onclick="storeData()">Store Data</button>
       <button onclick="retrieveData()">Retrieve Data</button>
       <button onclick="updateData()">Update Data</button>
@@ -347,7 +348,7 @@
 
       class StockFetcher {
         constructor(apiKey) {
-          this.apiKey = apiKey;
+          this.apiKey = "EI2SDSRC4PI8M5H8";
         }
 
         async fetch(ticker) {
@@ -394,8 +395,7 @@
       function fetchStockData() {
         const ticker = document.getElementById('tickerInput').value;
         $.ajax({
-          // Alphavantage
-          url: `https://www.alphavantage.co/query?function=TIME_SERIES_DAILY&symbol=${ticker}&apikey=EI2SDSRC4PI8M5H8`, // Replace with your API URL
+          url: `https://api.example.com/stock/${ticker}`, // Replace with your API URL
           type: 'GET',
           success: function(data) {
             const dates = Object.keys(data);
@@ -421,7 +421,7 @@
         const ticker = document.getElementById('tickerInput').value;
         const window = document.getElementById('windowInput').value;
         $.ajax({
-          url: `https://www.alphavantage.co/query?function=TIME_SERIES_DAILY&symbol=${ticker}&apikey=EI2SDSRC4PI8M5H8`, // Replace with your API URL
+          url: `https://www.alphavantage.co/query?function=TIME_SERIES_DAILY&symbol=${ticker}&apikey=YOUR_ALPHA_VANTAGE_API_KEY`, // Replace with your API URL
           type: 'GET',
           success: function(data) {
             const dates = Object.keys(data['Time Series (Daily)']).slice(0, window);
