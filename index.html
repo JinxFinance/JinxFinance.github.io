@@ -19,6 +19,34 @@
           text-align: center;
           font-size: 16px;
         }
+        .jinx-menu {
+          position: fixed;
+          top: 0;
+          width: 100%;
+          z-index: 1000;
+        }
+        .jinx-menu .navbar {
+          background-color: #f8f9fa;
+        }
+        .jinx-menu .navbar .navbar-brand {
+          font-size: 1.5rem;
+          font-weight: 500;
+        }
+        .jinx-menu .navbar .nav-item {
+          margin-right: 10px;
+        }
+        .jinx-menu .navbar .nav-link {
+          font-size: 1.2rem;
+          font-weight: 400;
+        }
+        #tickerInput {
+          margin-right: 10px;
+          display: inline-block;
+        }
+        #windowInput {
+          margin-right: 10px;
+          display: inline-block;
+        }
     </style>
     <script>
       // store data in a mysql table using pure Javascript and AJAX
@@ -355,6 +383,7 @@
         const ticker = document.getElementById('tickerInput').value;
         const window = document.getElementById('windowInput').value;
         const response = await fetch(`https://www.google.com/finance/quote/${ticker}:NASDAQ?window=${window}`);
+        console.log(response);
         const data = await response.text();
         const dataContainer = document.getElementById('dataContainer');
         dataContainer.innerHTML = data;
