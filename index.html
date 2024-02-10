@@ -17,7 +17,7 @@
   </script>
 </div>
 <-- TradingView Widget END -->
-<!-- TradingView Widget BEGIN -->
+<!-- TradingView Widget BEGIN >
 <div class="tradingview-widget-container" style="height:100%;width:100%">
   <div class="tradingview-widget-container__widget" style="height:calc(100% - 32px);width:100%"></div>
   <div class="tradingview-widget-copyright"><a href="https://www.tradingview.com/" rel="noopener nofollow" target="_blank"><span class="blue-text">Track all markets on TradingView</span></a></div>
@@ -41,4 +41,61 @@
 }
   </script>
 </div>
-<!-- TradingView Widget END -->
+< !-- TradingView Widget END -->
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Stock Data</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css">
+    <style>
+        .grid-container {
+            display: grid;
+            grid-template-columns: auto auto auto;
+            padding: 10px;
+        }
+        .grid-item {
+            border: 1px solid rgba(0, 0, 0, 0.8);
+            padding: 20px;
+            font-size: 30px;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Stock Data</h1>
+        <input id="tickerInput" type="text" placeholder="Enter ticker">
+        <button onclick="fetchData()">Fetch Data</button>
+        <div id="dataContainer" class="grid-container"></div>
+    </div>
+
+    <script>
+        class StockFetcher {
+            constructor(apiKey) {
+                this.apiKey = apiKey;
+            }
+
+            async fetch(ticker) {
+                const response = await fetch(`https://www.alphavantage.co/query?function=GLOBAL_QUOTE&symbol=${ticker}&apikey=${this.apiKey}`);
+                const data = await response.json();
+                return data["Global Quote"];
+            }
+        }
+
+        const fetcher = new StockFetcher('YOUR_ALPHA_VANTAGE_API_KEY');
+
+        async function fetchData() {
+            const ticker = document.getElementById('tickerInput').value;
+            const data = await fetcher.fetch(ticker);
+            const container = document.getElementById('dataContainer');
+            container.innerHTML = '';
+            for (const key in data) {
+                const div = document.createElement('div');
+                div.className = 'grid-item';
+                div.textContent = `${key}: ${data[key]}`;
+                container.appendChild(div);
+            }
+        }
+    </script>
+</body>
+</html>
