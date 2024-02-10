@@ -1,51 +1,8 @@
-<!-- TradingView Widget BEGIN >
-<div class="tradingview-widget-container">
-  <div class="tradingview-widget-container__widget"></div>
-  <div class="tradingview-widget-copyright"><a href="https://www.tradingview.com/" rel="noopener nofollow" target="_blank"><span class="blue-text">Track all markets on TradingView</span></a></div>
-  <script type="text/javascript" src="https://s3.tradingview.com/external-embedding/embed-widget-technical-analysis.js" async>
-  {
-  "interval": "1h",
-  "width": "100%",
-  "isTransparent": true,
-  "height": "100%",
-  "symbol": "NASDAQ:TSLA",
-  "showIntervalTabs": true,
-  "displayMode": "multiple",
-  "locale": "en",
-  "colorTheme": "light"
-}
-  </script>
-</div>
-<-- TradingView Widget END -->
-<!-- TradingView Widget BEGIN >
-<div class="tradingview-widget-container" style="height:100%;width:100%">
-  <div class="tradingview-widget-container__widget" style="height:calc(100% - 32px);width:100%"></div>
-  <div class="tradingview-widget-copyright"><a href="https://www.tradingview.com/" rel="noopener nofollow" target="_blank"><span class="blue-text">Track all markets on TradingView</span></a></div>
-  <script type="text/javascript" src="https://s3.tradingview.com/external-embedding/embed-widget-advanced-chart.js" async>
-  {
-  "autosize": true,
-  "symbol": "NASDAQ:AAPL",
-  "timezone": "America/Los_Angeles",
-  "theme": "light",
-  "style": "1",
-  "locale": "en",
-  "enable_publishing": true,
-  "withdateranges": true,
-  "range": "5D",
-  "hide_side_toolbar": false,
-  "allow_symbol_change": true,
-  "details": true,
-  "hotlist": true,
-  "calendar": true,
-  "support_host": "https://www.tradingview.com"
-}
-  </script>
-</div>
-< !-- TradingView Widget END -->
 <!DOCTYPE html>
 <html>
 <head>
   <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js"></script>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <title>Stock Data</title>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css">
     <style>
@@ -62,6 +19,26 @@
         }
     </style>
   <script>
+    function fetchData() {
+  const ticker = document.getElementById('tickerInput').value;
+  $.ajax({
+    url: `https://api.example.com/stock/${ticker}`, // Replace with your API URL
+    type: 'GET',
+    success: function(data) {
+      const dataContainer = document.getElementById('dataContainer');
+      dataContainer.innerHTML = '';
+      for (let key in data) {
+        const gridItem = document.createElement('div');
+        gridItem.className = 'grid-item';
+        gridItem.textContent = key + ': ' + data[key];
+        dataContainer.appendChild(gridItem);
+      }
+    },
+    error: function(error) {
+      console.error('Error:', error);
+    }
+  });
+}
 // Create
 function createData() {
   fetch('/api/data', {
@@ -143,8 +120,38 @@ function deleteData() {
         <button onclick="fetchData()">Fetch Data</button>
         <div id="dataContainer" class="grid-container"></div>
     </div>
-
+<div id="paginationContainer">
+  <button onclick="fetchData('prev')">Previous</button>
+  <span id="currentPage"></span>
+  <button onclick="fetchData('next')">Next</button>
+</div>
     <script>
+      let currentPage = 1;
+
+function fetchData(direction) {
+  if (direction === 'prev') currentPage = Math.max(1, currentPage - 1);
+  else if (direction === 'next') currentPage++;
+
+  const ticker = document.getElementById('tickerInput').value;
+  $.ajax({
+    url: `https://api.example.com/stock/${ticker}?page=${currentPage}`, // Replace with your API URL
+    type: 'GET',
+    success: function(data) {
+      const dataContainer = document.getElementById('dataContainer');
+      dataContainer.innerHTML = '';
+      for (let key in data) {
+        const gridItem = document.createElement('div');
+        gridItem.className = 'grid-item';
+        gridItem.textContent = key + ': ' + data[key];
+        dataContainer.appendChild(gridItem);
+      }
+      document.getElementById('currentPage').textContent = 'Page ' + currentPage;
+    },
+    error: function(error) {
+      console.error('Error:', error);
+    }
+  });
+}
         class StockFetcher {
             constructor(apiKey) {
                 this.apiKey = apiKey;
