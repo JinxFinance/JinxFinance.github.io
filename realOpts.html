@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Standard Deviation Calculator</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+</head>
+<body>
+    <div id="root"></div>
+
+    <script src="https://unpkg.com/react@16/umd/react.development.js"></script>
+    <script src="https://unpkg.com/react-dom@16/umd/react-dom.development.js"></script>
+    <script src="https://unpkg.com/babel-standalone@6/babel.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjs/5.10.3/math.min.js"></script>
+    <script type="text/babel">
+        class StdDevCalculator extends React.Component {
+            constructor(props) {
+                super(props);
+                this.state = { ticker: '', stdDev: null };
+
+                this.handleChange = this.handleChange.bind(this);
+                this.handleSubmit = this.handleSubmit.bind(this);
+            }
+
+            handleChange(event) {
+                this.setState({ ticker: event.target.value });
+            }
+
+            handleSubmit(event) {
+                event.preventDefault();
+                fetch(`https://www.alphavantage.co/query?function=TIME_SERIES_DAILY&symbol=${this.state.ticker}&apikey=YOUR_API_KEY`)
+                    .then(response => response.json())
+                    .then(data => {
+                        const prices = Object.values(data['Time Series (Daily)']).map(item => parseFloat(item['4. close']));
+                        const stdDev = math.std(prices);
+                        this.setState({ stdDev });
+                    });
+            }
+
+            render() {
+                return (
+                    <div className="container">
+                        <h1>Standard Deviation Calculator</h1>
+                        <form onSubmit={this.handleSubmit}>
+                            <div className="form-group">
+                                <label>Ticker Symbol</label>
+                                <input type="text" value={this.state.ticker} onChange={this.handleChange} className="form-control" />
+                            </div>
+                            <button type="submit" className="btn btn-primary">Calculate</button>
+                        </form>
+                        {this.state.stdDev !== null && (
+                            <div className="alert alert-info" role="alert">
+                                Standard Deviation: {this.state.stdDev.toFixed(2)}
+                            </div>
+                        )}
+                    </div>
+                );
+            }
+        }
+
+        ReactDOM.render(<StdDevCalculator />, document.getElementById('root'));
+    </script>
+</body>
+</html>
