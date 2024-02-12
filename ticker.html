@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>React App</title>
+    <script src="https://unpkg.com/react@17/umd/react.development.js"></script>
+    <script src="https://unpkg.com/react-dom@17/umd/react-dom.development.js"></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    <script src="https://unpkg.com/simple-statistics"></script>
+  </head>
+  <body>
+    <div id="root"></div>
+    <script type="text/babel">
+      // Your React code will go here
+    </script>
+    <script type="text/babel">
+  const { useEffect, useState } = React;
+
+  const TickerDataComponent = () => {
+    const [annualVolatility, setAnnualVolatility] = useState(null);
+
+    useEffect(() => {
+      fetch('https://api.your-ticker-data-provider.com/ticker')
+        .then(response => response.json())
+        .then(data => {
+          // Assuming data is an array of daily returns
+          const dailyVolatility = simpleStatistics.standardDeviation(data);
+          const annualVolatility = dailyVolatility * Math.sqrt(252); // There are typically 252 trading days in a year
+          setAnnualVolatility(annualVolatility);
+        })
+        .catch(error => console.error('Error:', error));
+    }, []);
+
+    return (
+      <div>
+        <h1>Annualized Volatility of Ticker Data</h1>
+        {annualVolatility && <p>{annualVolatility}</p>}
+      </div>
+    );
+  };
+
+  ReactDOM.render(<TickerDataComponent />, document.getElementById('root'));
+</script>
+  </body>

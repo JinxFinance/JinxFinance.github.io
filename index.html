@@ -57,6 +57,88 @@
         }
     </style>
     <script>
+      // Plotly Chart
+      function fetchStockData() {
+        const ticker = document.getElementById('tickerInput').value;
+        $.ajax({
+          url: `https://www.alphavantage.co/query?function=TIME_SERIES_DAILY&symbol=${ticker}&apikey=EI2SDSRC4PI8M5H8`, // Replace with your API URL
+          type: 'GET',
+          success: function(data) {
+            const dates = Object.keys(data['Time Series (Daily)']).slice(0, 10);
+            const prices = Object.values(data['Time Series (Daily)']).map(obj => obj['4. close']).slice(0, 10);
+            const trace = {
+              x: dates,
+              y: prices,
+              type: 'scatter'
+            };
+            const layout = {
+              title: `${ticker} Stock Price`
+            };
+            Plotly.newPlot('chartContainer', [trace], layout);
+          },
+          error: function(error) {
+            console.error('Error:', error);
+          }
+        });
+      }
+      // class to fetch stock data
+      class StockFetcher {
+        constructor(apiKey) {
+          this.apiKey = apiKey;
+        }
+
+        async fetch(ticker) {
+          const response = await fetch(`https://www.alphavantage.co/query?function=GLOBAL_QUOTE&symbol=${ticker}&apikey=${this.apiKey}`);
+          const data = await response.json();
+          return data["Global Quote"];
+        }
+
+        async fetchTimeSeries(ticker) {
+          const response = await fetch(`https://www.alphavantage.co/query?function=TIME_SERIES_DAILY&symbol=${ticker}&apikey=${this.apiKey}`);
+          const data = await response.json();
+          return data["Time Series (Daily)"];
+        }
+
+        async fetchTimeSeriesWindow(ticker, window) {
+          const response = await fetch(`https://www.alphavantage.co/query?function=TIME_SERIES_DAILY&symbol=${ticker}&apikey=${this.apiKey}`);
+          const data = await response.json();
+          const dates = Object.keys(data['Time Series (Daily)']).slice(0, window);
+          const prices = Object.values(data['Time Series (Daily)']).map(obj => obj['4. close']).slice(0, window);
+          return { dates, prices };
+        }
+
+        async fetchGlobalQuote(ticker) {
+          const response = await fetch(`https://www.alphavantage.co/query?function=GLOBAL_QUOTE&symbol=${ticker}&apikey=${this.apiKey}`);
+          const data = await response.json();
+          return data["Global Quote"];
+        }
+
+        async fetchGlobalQuoteWindow(ticker, window) {
+          const response = await fetch(`https://www.alphavantage.co/query?function=GLOBAL_QUOTE&symbol=${ticker}&apikey=${this.apiKey}`);
+          const data = await response.json();
+          const dates = Object.keys(data['Time Series (Daily)']).slice(0, window);
+          const prices = Object.values(data['Time Series (Daily)']).map(obj => obj['4. close']).slice(0, window);
+          return { dates, prices };
+        }
+
+        async fetchGlobalQuoteWindow(ticker, window) {
+          const response = await fetch(`https://www.alphavantage.co/query?function=GLOBAL_QUOTE&symbol=${ticker}&apikey=${this.apiKey}`);
+          const data = await response.json();
+          const dates = Object.keys(data['Time Series (Daily)']).slice(0, window);
+          const prices = Object.values(data['Time Series (Daily)']).map(obj => obj['4. close']).slice(0, window);
+          return { dates, prices };
+        }
+
+        async fetchGlobalQuoteWindow(ticker, window) {
+          const response = await fetch(`https://www.alphavantage.co/query?function=GLOBAL_QUOTE&symbol=${ticker}&apikey=${this.apiKey}`);
+          const data = await response.json();
+          const dates = Object.keys(data['Time Series (Daily)']).slice(0, window);
+          const prices = Object.values(data['Time Series (Daily)']).map(obj => obj['4. close']).slice(0, window);
+          return { dates, prices };
+        }
+      }
+    </script>
+    <script>
       // lightweight charts
       const chart = LightweightCharts.createChart(document.getElementById('chartContainer'), {
         width: 600,
