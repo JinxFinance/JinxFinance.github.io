@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Black-Scholes Calculator</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+</head>
+<body>
+    <div id="root"></div>
+
+    <script src="https://unpkg.com/react@16/umd/react.development.js"></script>
+    <script src="https://unpkg.com/react-dom@16/umd/react-dom.development.js"></script>
+    <script src="https://unpkg.com/babel-standalone@6/babel.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjs/5.10.3/math.min.js"></script>
+    <script type="text/babel">
+        class BlackScholesCalculator extends React.Component {
+            constructor(props) {
+                super(props);
+                this.state = { S: 100, K: 100, T: 1, r: 0.05, sigma: 0.2, call: true, price: null };
+
+                this.handleChange = this.handleChange.bind(this);
+                this.handleSubmit = this.handleSubmit.bind(this);
+            }
+
+            handleChange(event) {
+                const target = event.target;
+                const value = target.type === 'checkbox' ? target.checked : target.value;
+                const name = target.name;
+
+                this.setState({
+                    [name]: value
+                });
+            }
+
+            handleSubmit(event) {
+                event.preventDefault();
+                const { S, K, T, r, sigma, call } = this.state;
+                const d1 = (Math.log(S / K) + (r + 0.5 * sigma ** 2) * T) / (sigma * Math.sqrt(T));
+                const d2 = d1 - sigma * Math.sqrt(T);
+                const price = call
+                    ? S * math.erf(d1 / Math.sqrt(2)) / 2 - K * Math.exp(-r * T) * math.erf(d2 / Math.sqrt(2)) / 2
+                    : K * Math.exp(-r * T) * math.erf(-d2 / Math.sqrt(2)) / 2 - S * math.erf(-d1 / Math.sqrt(2)) / 2;
+                this.setState({ price });
+            }
+
+            render() {
+                return (
+                    <div className="container">
+                        <h1>Black-Scholes Calculator</h1>
+                        <form onSubmit={this.handleSubmit}>
+                            <div className="form-group">
+                                <label>Stock Price (S)</label>
+                                <input type="number" name="S" value={this.state.S} onChange={this.handleChange} className="form-control" />
+                            </div>
+                            <div className="form-group">
+                                <label>Strike Price (K)</label>
+                                <input type="number" name="K" value={this.state.K} onChange={this.handleChange} className="form-control" />
+                            </div>
+                            <div className="form-group">
+                                <label>Time to Maturity (T)</label>
+                                <input type="number" name="T" value={this.state.T} onChange={this.handleChange} className="form-control" />
+                            </div>
+                            <div className="form-group">
+                                <label>Risk-Free Rate (r)</label>
+                                <input type="number" name="r" value={this.state.r} onChange={this.handleChange} className="form-control" />
+                            </div>
+                            <div className="form-group">
+                                <label>Volatility (sigma)</label>
+                                <input type="number" name="sigma" value={this.state.sigma} onChange={this.handleChange} className="form-control" />
+                            </div>
+                            <div className="form-group">
+                                <label>
+                                    <input type="checkbox" name="call" checked={this.state.call} onChange={this.handleChange} />
+                                    Call Option
+                                </label>
+                            </div>
+                            <button type="submit" className="btn btn-primary">Calculate</button>
+                        </form>
+                        {this.state.price !== null && (
+                            <div className="alert alert-info" role="alert">
+                                Black-Scholes Price: {this.state.price.toFixed(2)}
+                            </div>
+                        )}
+                    </div>
+                );
+            }
+        }
+
+        ReactDOM.render(<BlackScholesCalculator />, document.getElementById('root'));
+    </script>
+</body>
+</html>
