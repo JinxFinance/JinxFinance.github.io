@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>My PWA</title>
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <!-- W3CSS -->
+    <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+    <!-- React JS -->
+    <script crossorigin src="https://unpkg.com/react@17/umd/react.production.min.js"></script>
+    <script crossorigin src="https://unpkg.com/react-dom@17/umd/react-dom.production.min.js"></script>
+    <!-- Babel JS (to allow JSX syntax) -->
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    <!-- TradingView Lightweight Charts -->
+    <script src="https://cdn.jsdelivr.net/npm/lightweight-charts@3.6.0/dist/lightweight-charts.standalone.production.js"></script>
+</head>
+<body>
+    <div id="root"></div>
+    <script type="text/babel">
+        class App extends React.Component {
+            componentDidMount() {
+                const chart = LightweightCharts.createChart(this.refs.chart, { width: 400, height: 300 });
+                const lineSeries = chart.addLineSeries();
+                lineSeries.setData([
+                    { time: '2022-01-01', value: 51.88 },
+                    { time: '2022-01-02', value: 56.14 },
+                    // more data points...
+                ]);
+            }
+
+            render() {
+                return (
+                    <div className="container">
+                        <div className="row">
+                            <div className="col">Column 1</div>
+                            <div className="col">Column 2</div>
+                            <div className="col" ref="chart"></div>
+                        </div>
+                    </div>
+                );
+            }
+        }
+
+        ReactDOM.render(<App />, document.getElementById('root'));
+    </script>
+</body>
+</html>

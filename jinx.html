@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Jinx</title>
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <!-- W3CSS -->
+    <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+    <!-- React JS -->
+    <script crossorigin src="https://unpkg.com/react@17/umd/react.production.min.js"></script>
+    <script crossorigin src="https://unpkg.com/react-dom@17/umd/react-dom.production.min.js"></script>
+    <!-- Babel JS (to allow JSX syntax) -->
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    <!-- TradingView Lightweight Charts -->
+    <script src="https://cdn.jsdelivr.net/npm/lightweight-charts@3.6.0/dist/lightweight-charts.standalone.production.js"></script>
+    <!-- Plotly.js -->
+    <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+</head>
+<body>
+    <div id="root"></div>
+    <script type="text/babel">
+        class App extends React.Component {
+            componentDidMount() {
+                // Fetch the .jinx.txt file
+                fetch('.jinx.txt')
+                    .then(response => response.text())
+                    .then(data => {
+                        let dataPoints;
+                        if (data.trim() === '') {
+                            // If the file is empty, generate 100 data points
+                            dataPoints = Array.from({ length: 100 }, (_, i) => ({
+                                x: new Date(2022, 0, 1 + i),
+                                y: 500 + Math.random() * 100, // simulate TSLA price
+                            }));
+                        } else {
+                            // Parse the file data
+                            dataPoints = data.split('\n').map(line => {
+                                const [x, y] = line.split(',');
+                                return { x: new Date(x), y: parseFloat(y) };
+                            });
+                        }
+
+                        // Create the chart
+                        const chart = LightweightCharts.createChart(this.refs.chart, { width: 400, height: 300 });
+                        const lineSeries = chart.addLineSeries();
+                        lineSeries.setData(dataPoints);
+
+                        // Create the Plotly plot
+                        Plotly.newPlot(this.refs.plot, [{
+                            x: dataPoints.map(point => point.x),
+                            y: dataPoints.map(point => point.y),
+                            type: 'scatter',
+                            mode: 'lines+markers',
+                            marker: { color: 'red' },
+                        }], {
+                            width: 720,
+                            height: 440,
+                            title: 'TSLA Price',
+                        });
+                    });
+            }
+
+            render() {
+                return (
+                    <div className="container">
+                        <div className="row">
+                            <div className="col">Column 1</div>
+                            <div className="col">Column 2</div>
+                            <div className="col" ref="chart"></div>
+                            <div className="col" ref="plot"></div>
+                        </div>
+                    </div>
+                );
+            }
+        }
+
+        ReactDOM.render(<App />, document.getElementById('root'));
+    </script>
+</body>
+</html>
