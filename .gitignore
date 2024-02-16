@@ -2,3 +2,5 @@
 pbcopy
 composer*
 index.html~
+.index.php.s*
+.gitignore.s*
