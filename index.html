@@ -1,51 +1,46 @@
 <!DOCTYPE html>
 <html>
-<head>
-  <title>Results</title>
-  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
-</head>
-<body>
-  <div id="root"></div>
+  <head>
+      <title>Jinx Data</title>
+        <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+  </head>
+  <body>
+      <div id="root"></div>
 
-  <script src="https://unpkg.com/react@17/umd/react.production.min.js"></script>
-  <script src="https://unpkg.com/react-dom@17/umd/react-dom.production.min.js"></script>
-  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
-  <script type="text/babel">
-    class Results extends React.Component {
-      constructor(props) {
-        super(props);
-        this.state = { results: [] };
-      }
+        <script>
+              fetch('data.html')
+      .then(response => response.text())
+      .then(data => {
+                // Parse the data
+                // This depends on the format of your data.html file
+                // For this example, let's assume it's a JSON string of arrays
+                const arrays = JSON.parse(data);
 
-      componentDidMount() {
-        fetch('index.php')
-          .then(response => response.json())
-          .then(data => this.setState({ results: data }));
-      }
+                // Create a table for each array
+                arrays.forEach((array, index) => {
+                            // Create the table
+                            const table = document.createElement('table');
+                            table.className = 'w3-table w3-bordered';
 
-      render() {
-        return (
-          <table className="table table-striped">
-            <thead>
-              <tr>
-                <th>#</th>
-                <th>Result</th>
-              </tr>
-            </thead>
-            <tbody>
-              {this.state.results.map((result, index) => (
-                <tr key={index}>
-                  <td>{index + 1}</td>
-                  <td>{result}</td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        );
-      }
-    }
+                            // Create a row for each item in the array
+                            array.forEach(item => {
+                                          const row = document.createElement('tr');
 
-    ReactDOM.render(<Results />, document.getElementById('root'));
+                                          // Create a cell for each property of the item
+                                          for (const property in item) {
+                                                          const cell = document.createElement('td');
+                                                          cell.textContent = item[property];
+                                                          row.appendChild(cell);
+                                                        }
+
+                                          table.appendChild(row);
+                                        });
+
+                            // Append the table to the root div
+                            document.getElementById('root').appendChild(table);
+                          });
+              })
+      .catch(error => console.error('Error:', error));
   </script>
-</body>
+  </body>
 </html>
