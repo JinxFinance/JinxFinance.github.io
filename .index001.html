@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Chart</title>
+    <script src="https://unpkg.com/react@17/umd/react.production.min.js"></script>
+    <script src="https://unpkg.com/react-dom@17/umd/react-dom.production.min.js"></script>
+    <script src="https://unpkg.com/babel-standalone@6/babel.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  </head>
+  <body>
+    <div id="root"></div>
+    <script type="text/babel">
+			class App extends React.Component {
+  state = { data: [], timeframe: '1m', yAxis: 'Volume' };
+
+  componentDidMount() {
+    this.fetchData();
+  }
+
+  fetchData = () => {
+    fetch('nasdaq.txt')
+      .then(response => response.text())
+      .then(data => {
+        const lines = data.split('\n');
+        this.setState({ data: lines });
+      });
+  }
+
+  handleChange = (event) => {
+    this.setState({ [event.target.name]: event.target.value });
+  }
+
+  handleSubmit = (event) => {
+    event.preventDefault();
+    this.fetchData();
+  }
+
+  render() {
+    return (
+      <div>
+        <form onSubmit={this.handleSubmit}>
+          <label>
+            Timeframe:
+            <select name="timeframe" value={this.state.timeframe} onChange={this.handleChange}>
+              <option value="1m">1 month</option>
+              <option value="3m">3 months</option>
+              <option value="6m">6 months</option>
+              <option value="1y">1 year</option>
+            </select>
+          </label>
+          <label>
+            Y-Axis:
+            <select name="yAxis" value={this.state.yAxis} onChange={this.handleChange}>
+              <option value="Volume">Volume</option>
+              <option value="Price">Price</option>
+            </select>
+          </label>
+          <input type="submit" value="Update" />
+        </form>
+        <canvas id="chart"></canvas>
+      </div>
+    );
+  }
+
+  componentDidUpdate() {
+    new Chart(document.getElementById('chart'), {
+      type: 'line',
+      data: {
+        labels: this.state.data.map((_, i) => i),
+        datasets: [{
+          data: this.state.data,
+          fill: false,
+          borderColor: 'rgb(75, 192, 192)',
+          tension: 0.1
+        }]
+      },
+      options: {
+        scales: {
+          y: {
+            beginAtZero: true
+          }
+        }
+      }
+    });
+  }
+}
+
+ReactDOM.render(<App />, document.getElementById('root'));
+    </script>
+  </body>
+</html>
+
+

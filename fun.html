@@ -1,0 +1,38 @@
+      class App extends React.Component {
+        state = { data: [] };
+
+        componentDidMount() {
+          fetch('nasdaq.txt')
+            .then(response => response.text())
+            .then(data => {
+              const lines = data.split('\n');
+              this.setState({ data: lines });
+            });
+        }
+
+        render() {
+          return (
+            <div>
+              <canvas id="chart"></canvas>
+            </div>
+          );
+        }
+
+        componentDidUpdate() {
+          new Chart(document.getElementById('chart'), {
+            type: 'line',
+            data: {
+              labels: this.state.data.map((_, i) => i),
+              datasets: [{
+                data: this.state.data,
+                fill: false,
+                borderColor: 'rgb(75, 192, 192)',
+                tension: 0.1
+              }]
+            }
+          });
+        }
+      }
+
+      ReactDOM.render(<App />, document.getElementById('root'));
+

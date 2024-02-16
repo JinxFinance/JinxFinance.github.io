@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html>
+  <head>
+      <title>Jinx Data</title>
+        <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+  </head>
+  <body>
+    <div id="root"></div>
+      <script>
+        // fetch data from nasdaq.txt to display in the table
+        fetch('data.html')
+        .then(response => response.text())
+        .then(data => {
+          // Parse the data
+          // This depends on the format of your data.html file
+          // For this example, let's assume it's a JSON string of arrays
+          const arrays = JSON.parse(data);
+
+          // Create a table for each array
+          arrays.forEach((array, index) => {
+            // Create the table
+            const table = document.createElement('table');
+            table.className = 'w3-table w3-bordered';
+
+            // Create a row for each item in the array
+            array.forEach(item => {
+              const row = document.createElement('tr');
+
+              // Create a cell for each property of the item
+              for (const property in item) {
+                const cell = document.createElement('td');
+                cell.textContent = item[property];
+                row.appendChild(cell);
+              }
+
+              table.appendChild(row);
+            });
+
+            // Append the table to the root div
+            document.getElementById('root').appendChild(table);
+          });
+        })
+      .catch(error => console.error('Error:', error));
+    </script>
+  </body>
+</html>
+

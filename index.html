@@ -1,45 +1,24 @@
 <!DOCTYPE html>
-<html>
-  <head>
-      <title>Jinx Data</title>
-        <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
-  </head>
-  <body>
-    <div id="root"></div>
-      <script>
-        fetch('data.html')
-        .then(response => response.text())
-        .then(data => {
-          // Parse the data
-          // This depends on the format of your data.html file
-          // For this example, let's assume it's a JSON string of arrays
-          const arrays = JSON.parse(data);
-
-          // Create a table for each array
-          arrays.forEach((array, index) => {
-            // Create the table
-            const table = document.createElement('table');
-            table.className = 'w3-table w3-bordered';
-
-            // Create a row for each item in the array
-            array.forEach(item => {
-              const row = document.createElement('tr');
-
-              // Create a cell for each property of the item
-              for (const property in item) {
-                const cell = document.createElement('td');
-                cell.textContent = item[property];
-                row.appendChild(cell);
-              }
-
-              table.appendChild(row);
-            });
-
-            // Append the table to the root div
-            document.getElementById('root').appendChild(table);
-          });
-        })
-      .catch(error => console.error('Error:', error));
-    </script>
-  </body>
-</html>
+	<html>
+	<head>
+			<title>Chart</title>
+			<link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+	</head>
+	<body>
+			<div class="w3-container">
+					<form id="form">
+							<label for="timeframe">Timeframe:</label>
+							<select id="timeframe" name="timeframe">
+									<option value="1m">1 month</option>
+									<option value="3m">3 months</option>
+									<option value="6m">6 months</option>
+									<option value="1y">1 year</option>
+							</select>
+							<input type="submit" value="Update">
+					</form>
+					<div id="chart"></div>
+			</div>
+			<script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+			<script src="script.js"></script>
+	</body>
+	</html>
