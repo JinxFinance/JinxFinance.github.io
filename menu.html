@@ -1,0 +1,27 @@
+CTYPE html>
+<html>
+<head>
+    <title>Menu</title>
+    <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+</head>
+<body>
+    <div class="w3-container">
+        <ul id="file-list" class="w3-ul w3-card-4"></ul>
+    </div>
+
+    <script>
+        fetch('list_files.php')
+            .then(response => response.json())
+            .then(files => {
+                const fileList = document.getElementById('file-list');
+                files.forEach(file => {
+                    const li = document.createElement('li');
+                    li.textContent = file;
+                    li.className = 'w3-bar-item';
+                    fileList.appendChild(li);
+                });
+            });
+    </script>
+</body>
+</html>
+
