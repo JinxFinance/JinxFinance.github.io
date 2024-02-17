@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Menu</title>
+    <title>JS Menu</title>
     <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
 </head>
 <body>
@@ -10,13 +10,16 @@
     </div>
 
     <script>
-        fetch('list_files.php')
-            .then(response => response.json())
-            .then(files => {
+        fetch('/')
+            .then(response => response.text())
+            .then(data => {
+                const parser = new DOMParser();
+                const htmlDocument = parser.parseFromString(data, "text/html");
+                const links = htmlDocument.documentElement.querySelectorAll('a');
                 const fileList = document.getElementById('file-list');
-                files.forEach(file => {
+                links.forEach(link => {
                     const li = document.createElement('li');
-                    li.textContent = file;
+                    li.textContent = link.textContent;
                     li.className = 'w3-bar-item';
                     fileList.appendChild(li);
                 });
@@ -24,4 +27,3 @@
     </script>
 </body>
 </html>
-
