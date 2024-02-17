@@ -5,7 +5,7 @@ from tensorflow.keras.models import Sequential
 from tensorflow.keras.layers import LSTM, Dense
 
 # Load the data
-data = pd.read_csv('nasdaq.txt', header=None)
+data = pd.read_csv('.dji.txt', header=None)
 
 # Preprocess the data
 scaler = MinMaxScaler(feature_range=(0, 1))
