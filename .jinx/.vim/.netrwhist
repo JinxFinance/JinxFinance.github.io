@@ -1,0 +1,10 @@
+let g:netrw_dirhistmax  =10
+let g:netrw_dirhistcnt =8
+let g:netrw_dirhist_8='/home/codespace/.tmux/tmux-ticker/scripts'
+let g:netrw_dirhist_7='/home/codespace/.tmux/tmux-ticker'
+let g:netrw_dirhist_6='/home/codespace/.tmux'
+let g:netrw_dirhist_5='/home/codespace'
+let g:netrw_dirhist_4='/home'
+let g:netrw_dirhist_3='/home/codespace'
+let g:netrw_dirhist_2='/home'
+let g:netrw_dirhist_1='/home/codespace'
