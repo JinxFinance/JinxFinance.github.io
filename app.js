@@ -6,7 +6,7 @@ document.getElementById('stock-form').addEventListener('submit', function(event)
   var startDate = document.getElementById('start-date').value;
   var endDate = document.getElementById('end-date').value;
 
-  var apiKey = 'YOUR_ALPHA_VANTAGE_API_KEY'; // Replace with your API key
+  var apiKey = 'MD0ACNJ6QY9SQTZ0'; // Replace with your API key
 
   fetch(`https://www.alphavantage.co/query?function=TIME_SERIES_INTRADAY&symbol=${ticker}&interval=${interval}&apikey=${apiKey}`)
     .then(response => response.json())
