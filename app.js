@@ -43,3 +43,57 @@ if ('serviceWorker' in navigator) {
     });
 }
 
+
+Notification.requestPermission().then(function(permission) {
+  if (permission === 'granted') {
+    console.log('Notification permission granted.');
+  } else {
+    console.log('Unable to get permission to notify.');
+  }
+});
+
+navigator.serviceWorker.ready.then(function(registration) {
+  if (!registration.pushManager) {
+    console.log('Push manager unavailable.');
+    return;
+  }
+
+  registration.pushManager.getSubscription().then(function(existedSubscription) {
+    if (existedSubscription === null) {
+      console.log('No subscription detected, make a request.');
+      registration.pushManager.subscribe({
+        applicationServerKey: urlBase64ToUint8Array('YOUR_PUBLIC_VAPID_KEY_HERE'),
+        userVisibleOnly: true,
+      }).then(function(newSubscription) {
+        console.log('New subscription added.');
+        // TODO: Send to application server
+      }).catch(function(e) {
+        if (Notification.permission !== 'granted') {
+          console.log('Permission was not granted.');
+        } else {
+          console.error('An error ocurred during the subscription process.', e);
+        }
+      });
+    } else {
+      console.log('Existing subscription detected.');
+    }
+  });
+})
+
+self.addEventListener('push', function(event) {
+  if (event.data) {
+    console.log('Push event!! ', event.data.text());
+    showLocalNotification('Yolo', event.data.text(), self.registration);
+  } else {
+    console.log('Push event but no data');
+  }
+});
+
+const showLocalNotification = (title, body, swRegistration) => {
+  const options = {
+    body,
+    // here you can add more properties like icon, image, vibrate, etc.
+  };
+  swRegistration.showNotification(title, options);
+}
+
